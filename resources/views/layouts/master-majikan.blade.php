@@ -81,7 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="info">
           <a href="#" class="d-block">
-            {{Auth::user()->name}}
+            {{Auth::user()->email}}
           </a>
         </div>
       </div>
@@ -91,48 +91,51 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <router-link to="/admin-dashboard" class="nav-link" active-class="active" exact>
+          {{-- <li class="nav-item">
+            <router-link to="/pemesanan" class="nav-link" active-class="active" exact>
               <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Dashboard
+                  Pesan PRT
                 </p>
             </router-link>
-          </li>
+          </li> --}}
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Member
+                Pesan PRT
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/daftar-pekerja" class="nav-link" active-class="active" exact>
+                <router-link to="/pembantu" class="nav-link" active-class="active" exact>
                   <i class="fas fa-child nav-icon"></i>
-                  <p>Daftar Pekerja</p>
+                  <p>Pembantu</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/daftar-majikan" class="nav-link" active-class="active" exact>
+                <router-link to="/babysitter" class="nav-link" active-class="active" exact>
                   <i class="fas fa-user nav-icon"></i>
-                  <p>Daftar Majikan</p>
+                  <p>BabySitter</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/daftar-admin" class="nav-link" active-class="active" exact>
+                <router-link to="/perawat" class="nav-link" active-class="active" exact>
                   <i class="fas fa-user-tie nav-icon"></i>
-                  <p>Daftar Admin</p>
+                  <p>Perawat Lansia</p>
                 </router-link>
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <router-link to="/pendaftaran-pekerja" class="nav-link" active-class="active" exact>
-              <i class="fas fa-user-tie nav-icon"></i>
-              <p>Pendaftaran Pekerja</p>
-            </router-link>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Simple Link
+                <span class="right badge badge-danger">New</span>
+              </p>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"

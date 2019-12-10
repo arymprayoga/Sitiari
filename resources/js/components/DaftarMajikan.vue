@@ -4,14 +4,14 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Daftar Pekerja</h3>
+                <h3 class="card-title">Daftar Majikan</h3>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" v-model="search" name="table_search" class="form-control float-right" @keyup.enter="searchit" placeholder="Search">
                     <button type="submit" class="btn btn-default" @click="searchit"><i class="fas fa-search"></i></button>
                   </div>
-                  <button class="btn btn-success" @click="addPekerjaModal"><i class="fas fa-user-plus"></i>Tambah Pekerja</button>
+                  <button class="btn btn-success" @click="addMajikanModal"><i class="fas fa-user-plus"></i>Tambah Majikan</button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -23,14 +23,8 @@
                       <th>Email</th>
                       <th>Nama</th>
                       <th>Nomor KTP</th>
-                      <th>Usia</th>
                       <th>Telepon</th>
                       <th>Alamat</th>
-                      <th>Keahlian</th>
-                      <th>Kondisi Khusus</th>
-                      <th>Agama</th>
-                      <th>Gaji</th>
-                      <th>Jenis Pekerjaan</th>
                       <th>Tanggal Masuk</th>
                       <th>Status</th>
                       <th>Foto KTP</th>
@@ -39,33 +33,27 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="pkj in pekerja.data" :key="pkj.id" >
-                      <td>{{pkj.id}}</td>
-                      <td>{{pkj.email}}</td>
-                      <td>{{pkj.list_pekerja.nama}}</td>
-                      <td>{{pkj.list_pekerja.nomorKTP}}</td>
-                      <td>{{pkj.list_pekerja.usia}}</td>
-                      <td>{{pkj.list_pekerja.tel}}</td>
-                      <td>{{pkj.list_pekerja.alamat}}</td>
-                      <td>{{pkj.list_pekerja.keahlian}}</td>
-                      <td>{{pkj.list_pekerja.kondisiKhusus}}</td>
-                      <td>{{pkj.list_pekerja.agama}}</td>
-                      <td>{{pkj.list_pekerja.gaji}}</td>
-                      <td>{{pkj.jenisPekerjaan}}</td>
-                      <td>{{pkj.list_pekerja.tanggalMasuk | myDate}}</td>
-                      <td>{{pkj.status}}</td>
+                    <tr v-for="mjk in majikan.data" :key="mjk.id" >
+                      <td>{{mjk.id}}</td>
+                      <td>{{mjk.email}}</td>
+                      <td>{{mjk.list_majikan.nama}}</td>
+                      <td>{{mjk.list_majikan.nomorKTP}}</td>
+                      <td>{{mjk.list_majikan.tel}}</td>
+                      <td>{{mjk.list_majikan.alamat}}</td>
+                      <td>{{mjk.list_majikan.tanggalMasuk | myDate}}</td>
+                      <td>{{mjk.status}}</td>
                       <td>
-                        <img class="img-fluid img-thumbnail" :src="getFoto(pkj.list_pekerja.fotoKTP)">
+                        <img class="img-fluid img-thumbnail" :src="getFoto(mjk.list_majikan.fotoKTP)">
                       </td>
                       <td>
-                        <img class="img-fluid img-thumbnail" :src="getFoto(pkj.list_pekerja.fotoDiri)">
+                        <img class="img-fluid img-thumbnail" :src="getFoto(mjk.list_majikan.fotoDiri)">
                       </td>
                       <td>
-                          <a href="#" @click="editPekerjaModal(pkj)">
+                          <a href="#" @click="editMajikanModal(mjk)">
                               <i class="fa fa-edit blue"></i>
                           </a>
                           /
-                          <a href="#" @click="deletePekerja(pkj.id)">
+                          <a href="#" @click="deleteMajikan(mjk.id)">
                               <i class="fa fa-trash red"></i>
                           </a>
                       </td>
@@ -75,7 +63,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                <pagination :data="pekerja" @pagination-change-page="getResults"></pagination>
+                <pagination :data="majikan" @pagination-change-page="getResults"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -83,17 +71,17 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="addPekerjaModal" tabindex="-1" role="dialog" aria-labelledby="addPekerjaModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addMajikanModal" tabindex="-1" role="dialog" aria-labelledby="addMajikanModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 v-show="editMode" class="modal-title" id="addPekerjaModalLabel">Edit Data Pekerja</h5>
-                <h5 v-show="!editMode" class="modal-title" id="addPekerjaModalLabel">Tambah Pekerja Baru</h5>
+                <h5 v-show="editMode" class="modal-title" id="addMajikanModalLabel">Edit Data Majikan</h5>
+                <h5 v-show="!editMode" class="modal-title" id="addMajikanModalLabel">Tambah Majikan Baru</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form @submit.prevent="editMode ? editPekerja() : addPekerja()">
+            <form @submit.prevent="editMode ? editMajikan() : addMajikan()">
                 <div class="modal-body">                
                     <div class="form-group">
                         <label>Nama</label>
@@ -120,12 +108,6 @@
                     </div> 
 
                     <div class="form-group">
-                        <label>Usia</label>
-                        <input v-model="form.usia" type="number" name="usia" class="form-control" :class="{ 'is-invalid': form.errors.has('usia') }">
-                        <has-error :form="form" field="usia"></has-error>
-                    </div>
-
-                    <div class="form-group">
                         <label>Nomor Telepon</label>
                         <input v-model="form.tel" type="number" name="tel" class="form-control" :class="{ 'is-invalid': form.errors.has('tel') }">
                         <has-error :form="form" field="tel"></has-error>
@@ -138,48 +120,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Keahlian</label>
-                        <textarea v-model="form.keahlian" rows="3" name="keahlian" class="form-control" :class="{ 'is-invalid': form.errors.has('keahlian') }"></textarea>
-                        <has-error :form="form" field="keahlian"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kondisi Khusus</label>
-                        <textarea v-model="form.kondisiKhusus" rows="2" name="kondisiKhusus" class="form-control" :class="{ 'is-invalid': form.errors.has('kondisiKhusus') }"></textarea>
-                        <has-error :form="form" field="kondisiKhusus"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Agama</label>
-                        <input v-model="form.agama" type="text" name="agama" class="form-control" :class="{ 'is-invalid': form.errors.has('agama') }">
-                        <has-error :form="form" field="agama"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Gaji</label>
-                        <input v-model="form.gaji" type="text" name="gaji" class="form-control" :class="{ 'is-invalid': form.errors.has('gaji') }">
-                        <has-error :form="form" field="gaji"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="status">Jenis Pekerjaan</label>
-                      <select v-model="form.jenisPekerjaan" name="jenisPekerjaan" class="form-control" :class="{ 'is-invalid': form.errors.has('jenisPekerjaan') }">
-                      <has-error :form="form" field="jenisPekerjaan"></has-error> 
-                        <option>pembantu</option>
-                        <option>babysitter</option>
-                        <option>perawat</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group">
                       <label for="status">Status</label>
                       <select v-model="form.status" name="status" class="form-control" :class="{ 'is-invalid': form.errors.has('status') }">
                       <has-error :form="form" field="status"></has-error> 
-                        <option>tersedia</option>
-                        <option>bekerja</option>
-                        <option>resign</option>
+                        <option>aktif</option>
+                        <option>nonaktif</option>
                         <option>blacklist</option>
-                        <option>pending</option>
                       </select>
                     </div>
 
@@ -216,51 +162,45 @@
                   email: '',
                   password: '',
                   nomorKTP: '',
-                  usia: '',
                   tel: '',
                   alamat: '',
-                  keahlian: '',
-                  kondisiKhusus: '',
-                  agama: '',
                   fotoKTP: '',
                   fotoDiri: '',
-                  status: '',
-                  gaji: '',
-                  jenisPekerjaan: '',
+                  status: ''
               }),
-              pekerja : {},
-              search : '',
+              majikan : {},
+              search: '',
             }
         },
         methods: {
             searchit(){
-              axios.get('api/admin/findPekerja?q=' + this.search)
+              axios.get('api/admin/findMajikan?q=' + this.search)
               .then((data) => {
-                this.pekerja = data.data
+                this.majikan = data.data
               })
               .catch(() => {
               })
             },
             getResults(page = 1){
-              axios.get('api/admin/showPekerja?page=' + page)
+              axios.get('api/admin/showMajikan?page=' + page)
                 .then(response => {
-                  this.pekerja = response.data;
+                  this.majikan = response.data;
                 })
             },
             loadUsers(){
-              axios.get("api/admin/showPekerja").then(({data}) => (this.pekerja = data));
+              axios.get("api/admin/showMajikan").then(({data}) => (this.majikan = data));
             },
-            addPekerja(){
+            addMajikan(){
                 this.$Progress.start();
-                this.form.post('api/admin/addPekerja')
+                this.form.post('api/admin/addMajikan')
                 .then(()=>{
                   
                   toast.fire({
                     icon: 'success',
-                    title: 'Pekerja Berhasil Dibuat'
+                    title: 'Majikan Berhasil Dibuat'
                   })
                   
-                  $('#addPekerjaModal').modal('hide')
+                  $('#addMajikanModal').modal('hide')
                   
                   this.loadUsers();
                   
@@ -271,18 +211,18 @@
                   swal.fire("Oops...", "Terjadi kesalahan", "error");
                 })                                
             },
-            editPekerja(){
+            editMajikan(){
               this.$Progress.start();
-              this.form.put('api/admin/editPekerja/' + this.form.id)
+              this.form.put('api/admin/editMajikan/' + this.form.id)
               .then(() => {
                 //sukses
                 this.loadUsers();
                 toast.fire({
                     icon: 'success',
-                    title: 'Pekerja Berhasil Diedit'
+                    title: 'Majikan Berhasil Dibuat'
                   })
                 this.$Progress.finish();
-                $('#addPekerjaModal').modal('hide')
+                $('#addMajikanModal').modal('hide')
               })
               .catch(() => {
                 //gagal
@@ -291,7 +231,7 @@
                 this.loadUsers();
               })
             },
-            deletePekerja(id){
+            deleteMajikan(id){
               swal.fire({
                 title: 'Apa anda yakin?',
                 text: "Perubahan ini tidak dapat dikembalikan!",
@@ -302,10 +242,10 @@
                 confirmButtonText: 'Ya, Hapus!'
               }).then((result) => {
                 if (result.value) {
-                  this.form.delete('api/admin/hapusPekerja/' + id).then(()=>{                  
+                  this.form.delete('api/admin/hapusMajikan/' + id).then(()=>{                  
                     toast.fire({
                     icon: 'success',
-                    title: 'Pekerja Berhasil Dihapus'
+                    title: 'Majikan Berhasil Dihapus'
                   })
                     this.loadUsers();
                     
@@ -316,30 +256,24 @@
                 }
               })                
             },
-            addPekerjaModal(){
+            addMajikanModal(){
               this.editMode = false;
               this.form.reset();
-              $('#addPekerjaModal').modal('show')
+              $('#addMajikanModal').modal('show')
             },
-            editPekerjaModal(user){
+            editMajikanModal(user){
               this.editMode = true;
               this.form.reset();
-              $('#addPekerjaModal').modal('show');
+              $('#addMajikanModal').modal('show');
               this.form.id = user.id;
-              this.form.nama = user.list_pekerja.nama;
+              this.form.nama = user.list_majikan.nama;
               this.form.email = user.email;
-              this.form.nomorKTP = user.list_pekerja.nomorKTP;
-              this.form.usia = user.list_pekerja.usia;
-              this.form.tel = user.list_pekerja.tel;
-              this.form.alamat = user.list_pekerja.alamat;
-              this.form.keahlian = user.list_pekerja.keahlian;
-              this.form.kondisiKhusus = user.list_pekerja.kondisiKhusus;
-              this.form.agama = user.list_pekerja.agama;
-              this.form.fotoKTP = user.list_pekerja.fotoKTP;
-              this.form.fotoDiri = user.list_pekerja.fotoDiri;
+              this.form.nomorKTP = user.list_majikan.nomorKTP;
+              this.form.tel = user.list_majikan.tel;
+              this.form.alamat = user.list_majikan.alamat;
+              this.form.fotoKTP = user.list_majikan.fotoKTP;
+              this.form.fotoDiri = user.list_majikan.fotoDiri;
               this.form.status = user.status;
-              this.form.gaji = user.list_pekerja.gaji;
-              this.form.jenisPekerjaan = user.jenisPekerjaan;
             },
             updatePhotoKTP(e){
               this.$Progress.start();

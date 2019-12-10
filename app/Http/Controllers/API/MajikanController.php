@@ -4,14 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\User;
 use App\Pekerja;
 use App\DetailPekerja;
 use App\Majikan;
 use App\DetailMajikan;
 use Illuminate\Support\Facades\Hash;
 
-class AdminController extends Controller
+class MajikanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +20,7 @@ class AdminController extends Controller
     
     public function index()
     {
-        return User::paginate(5);
+        
     }
 
     /**
@@ -32,16 +31,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:4'
-        ]);
-        return User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password'])
-        ]);
+        
     }
 
     /**
@@ -64,16 +54,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $this->validate($request,[
-            'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-            'password' => 'sometimes|min:4'
-        ]);
-        $hash = Hash::make($request['password']);
-        $request->merge(['password' => $hash]);
-        $user->update($request->all());
-        return ['message' => 'data changed'];
+        
     }
 
     /**
@@ -84,28 +65,36 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-
-        return ['message' => 'Admin Deleted'];
+      
     }
 
-    public function findAdmin()
-    {        
-        if($search = \Request::get('q')){
-            $users = User::where(function($query) use ($search){
-                $query->where('name','LIKE',"%$search%");
-            })->paginate(5); 
-        }
-        return $users;
-    }
-
-    public function showPekerja()
+    public function showPembantu()
     {
         // return Pekerja::find(1)->listPekerja;
         // $user = DB::table('pekerja')->get();
         // return ['data' => $user];
         
-        return Pekerja::with('listPekerja')->paginate(5);
+        $matchThese = ['jenisPekerjaan' => 'pembantu', 'status' => 'tersedia'];
+        return Pekerja::with('listPekerja')->where($matchThese)->paginate(4);
+    }
+
+    public function showBabysitter()
+    {
+        // return Pekerja::find(1)->listPekerja;
+        // $user = DB::table('pekerja')->get();
+        // return ['data' => $user];
+        $matchThese = ['jenisPekerjaan' => 'babysitter', 'status' => 'tersedia'];
+        return Pekerja::with('listPekerja')->where($matchThese)->paginate(4);
+    }
+
+    public function showPerawat()
+    {
+        // return Pekerja::find(1)->listPekerja;
+        // $user = DB::table('pekerja')->get();
+        // return ['data' => $user];
+        
+        $matchThese = ['jenisPekerjaan' => 'perawat', 'status' => 'tersedia'];
+        return Pekerja::with('listPekerja')->where($matchThese)->paginate(4);
     }
 
     public function addPekerja(Request $req){
@@ -229,7 +218,7 @@ class AdminController extends Controller
     public function showMajikan()
     {
         // return Pekerja::find(1)->listPekerja;
-        return Majikan::with('listMajikan')->paginate(5);
+        return Majikan::with('listMajikan')->paginate(10);
     }
 
     public function addMajikan(Request $req){
@@ -336,42 +325,5 @@ class AdminController extends Controller
             })->paginate(5); 
         }
         return $users;
-    }
-
-    public function getJumlahPekerja()
-    {
-        return Pekerja::where('status','tersedia')->count();
-    }
-
-    public function getJumlahPendaftar()
-    {
-        return Pekerja::where('status','pending')->count();
-    }
-
-    public function getJumlahMajikan()
-    {
-        return Majikan::where('status','aktif')->count();
-    }
-
-    public function showPendaftar()
-    {
-        return Pekerja::with('listPekerja')->where('status','pending')->paginate(5);
-    }
-
-    public function findPendaftar()
-    {        
-        if($search = \Request::get('q')){
-            $users = Pekerja::with('listPekerja')->where(function($query) use ($search){
-                $query->where('email','LIKE',"%$search%")->where('status', 'pending');
-            })->paginate(5); 
-        }
-        return $users;
-    }
-
-    public function konfirmasiPendaftar(Request $request, $id)
-    {
-        $user = Pekerja::findOrFail($id);
-        $user->update($request->all());
-        return ['message' => 'data changed'];
     }
 }

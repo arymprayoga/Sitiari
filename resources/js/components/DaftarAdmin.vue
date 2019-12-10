@@ -5,8 +5,11 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Daftar Admin</h3>
-
                 <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" v-model="search" name="table_search" class="form-control float-right" @keyup.enter="searchit" placeholder="Search">
+                    <button type="submit" class="btn btn-default" @click="searchit"><i class="fas fa-search"></i></button>
+                  </div>
                   <button class="btn btn-success" @click="addAdminModal"><i class="fas fa-user-plus"></i> Tambah Admin</button>
                 </div>
               </div>
@@ -23,7 +26,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users" :key="user.id" >
+                    <tr v-for="user in users.data" :key="user.id" >
                       <td>{{user.id}}</td>
                       <td>{{user.name}}</td>
                       <td>{{user.email}}</td>
@@ -42,6 +45,9 @@
                 </table>
               </div>
               <!-- /.card-body -->
+              <div class="card-footer">
+                <pagination :data="users" @pagination-change-page="getResults"></pagination>
+              </div>
             </div>
             <!-- /.card -->
           </div>
@@ -101,12 +107,27 @@
                   email: '',
                   password: ''
               }),
-              users : {}
+              users : {},
+              search : ''
             }
         },
         methods: {
+            searchit(){
+              axios.get('api/admin/findAdmin?q=' + this.search)
+              .then((data) => {
+                this.users = data.data
+              })
+              .catch(() => {
+              })
+            },
+            getResults(page = 1){
+              axios.get('api/admin?page=' + page)
+                .then(response => {
+                  this.users = response.data;
+                })
+            },
             loadUsers(){
-              axios.get("api/admin").then(({data}) => (this.users = data.data));
+              axios.get("api/admin").then(({data}) => (this.users = data));
             },
             addAdmin(){
                 this.$Progress.start();
@@ -115,7 +136,7 @@
                   
                   toast.fire({
                     icon: 'success',
-                    title: 'User Berhasil Dibuat'
+                    title: 'Admin Berhasil Dibuat'
                   })
                   
                   $('#addAdminModal').modal('hide')
@@ -135,7 +156,7 @@
                 //sukses
                 toast.fire({
                     icon: 'success',
-                    title: 'User Berhasil Diedit'
+                    title: 'Admin Berhasil Diedit'
                   })
                     this.loadUsers();
                 this.$Progress.finish();
@@ -161,7 +182,7 @@
                   this.form.delete('api/admin' + id).then(()=>{                  
                     toast.fire({
                     icon: 'success',
-                    title: 'User Berhasil Dihapus'
+                    title: 'Admin Berhasil Dihapus'
                   })
                     this.loadUsers();
                     

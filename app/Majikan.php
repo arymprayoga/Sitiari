@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Pekerja extends Authenticatable
+class Majikan extends Authenticatable
 {
     //table name
-    protected $guard = 'pekerja';
+    protected $guard = 'majikan';
 
-    protected $table = 'pekerja';
+    protected $table = 'majikan';
 
     public $primaryKey = 'id';
 
@@ -20,12 +20,11 @@ class Pekerja extends Authenticatable
     protected $fillable = [
         'email',
         'password',
-        'status',
-        'jenisPekerjaan'
+        'status'
     ];
 
-    public function listPekerja()
+    public function listMajikan()
     {
-        return $this->hasOne('App\DetailPekerja', 'id_pekerja', 'id');
+        return $this->hasOne('App\DetailMajikan', 'id_majikan', 'id');
     }
 }

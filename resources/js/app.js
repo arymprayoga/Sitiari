@@ -17,6 +17,8 @@ Vue.component(AlertError.name, AlertError)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 import moment from 'moment'
 
 import VueProgressBar from 'vue-progressbar'
@@ -41,19 +43,32 @@ const toast = swal.mixin({
   })
 window.toast = toast;
 
+import StarRating from 'vue-star-rating'
+Vue.component('star-rating', StarRating);
+
 let routes = [
     { path: '/admin-dashboard', component: require('./components/AdminDashboard.vue').default },
     { path: '/daftar-admin', component: require('./components/DaftarAdmin.vue').default },
-    { path: '/daftar-pekerja', component: require('./components/DaftarPekerja.vue').default }
+    { path: '/daftar-pekerja', component: require('./components/DaftarPekerja.vue').default },
+    { path: '/daftar-majikan', component: require('./components/DaftarMajikan.vue').default },
+    { path: '/pembantu', component: require('./components/Pembantu.vue').default },
+    { path: '/babysitter', component: require('./components/Babysitter.vue').default },
+    { path: '/perawat', component: require('./components/Perawat.vue').default },
+    { path: '/pendaftaran-pekerja', component: require('./components/PendaftaranPekerja.vue').default },
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    // mode: 'history',
     routes
 })
 
 Vue.filter('upText', function(text){
     return text.charAt(0).toUpperCase() + text.slice(1)
+})
+
+Vue.filter('currency', function(number){
+    let val = (number/1).toFixed(0).replace('.', ',')
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 })
 
 Vue.filter('myDate', function(date){

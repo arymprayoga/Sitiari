@@ -17,7 +17,7 @@ class DetailPekerja extends Model
         'id_pekerja',
         'nama',
         'nomorKTP',
-        'ttl',
+        'usia',
         'tel',
         'alamat',
         'keahlian',
@@ -26,6 +26,7 @@ class DetailPekerja extends Model
         'fotoKTP',
         'fotoDiri',
         'tanggalMasuk',
+        'gaji',
     ];
 
     public function listPekerja()

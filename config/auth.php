@@ -46,6 +46,28 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'majikan' => [
+            'driver' => 'session',
+            'provider' => 'majikan',
+        ],
+
+        'majikan-api' => [
+            'driver' => 'token',
+            'provider' => 'majikan',
+            'hash' => false,
+        ],
+
+        'pekerja' => [
+            'driver' => 'session',
+            'provider' => 'pekerja',
+        ],
+
+        'pekerja-api' => [
+            'driver' => 'token',
+            'provider' => 'pekerja',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -69,6 +91,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'majikan' => [
+            'driver' => 'eloquent',
+            'model' => App\Majikan::class,
+        ],
+
+        'pekerja' => [
+            'driver' => 'eloquent',
+            'model' => App\Pekerja::class,
         ],
 
         // 'users' => [
@@ -99,6 +131,20 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        // 'majikan' => [
+        //     'provider' => 'majikan',
+        //     'table' => 'password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
+
+        // 'pekerja' => [
+        //     'provider' => 'pekerja',
+        //     'table' => 'password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
     ],
 
     /*
